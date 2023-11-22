@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.util.List;
 
 //@EqualsAndHashCode(of = {"orderNumber"})
+// Aggregate Root Entity에 해당하는 객체.
 public class Order {
     @Getter
     private OrderNo id;
@@ -37,6 +38,7 @@ public class Order {
         if (shippingInfo == null) {
             throw new IllegalArgumentException("no ShippingInfo");
         }
+        // value 타입의 데이터를 변경할 때는 새로운 객체로 교체한다.
         this.shippingInfo = shippingInfo;
     }
 
