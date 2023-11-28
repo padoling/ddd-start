@@ -1,5 +1,6 @@
 package com.example.dddstart.order.domain;
 
+import com.example.dddstart.catalog.domain.product.Product;
 import lombok.Getter;
 
 public class OrderLine {
