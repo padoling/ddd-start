@@ -1,4 +1,10 @@
 package com.example.dddstart.catalog.domain.product;
 
-public class ProductId {
+import jakarta.persistence.Embeddable;
+
+import java.io.Serializable;
+
+@Embeddable
+public class ProductId implements Serializable {
+
 }

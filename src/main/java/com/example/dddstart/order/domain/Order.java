@@ -1,5 +1,7 @@
 package com.example.dddstart.order.domain;
 
+import com.example.dddstart.common.jpa.MoneyConverter;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -7,15 +9,37 @@ import java.util.List;
 
 //@EqualsAndHashCode(of = {"orderNumber"})
 // Aggregate Root Entity에 해당하는 객체.
+@Entity
+@Table(name = "purchase_order")
+@Access(AccessType.FIELD)
 public class Order {
     @Getter
-    private OrderNo id;
+    @EmbeddedId
+    private OrderNo number;
+
     @Getter
+    @Embedded
     private Orderer orderer;
+
+    @Column(name = "state")
+    @Enumerated(EnumType.STRING)
     private OrderState state;
+
+    @Embedded
     private ShippingInfo shippingInfo;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "order_line",
+                joinColumns = @JoinColumn(name = "order_number"))
+    @OrderColumn(name = "line_idx")     // List 타입 자체가 인덱스를 갖고 있음
     private List<OrderLine> orderLines;
+
+    @Column(name = "total_amounts")
+    @Convert(converter = MoneyConverter.class)
     private Money totalAmounts;
+
+    protected Order() {
+    }
 
     public Order(Orderer orderer, List<OrderLine> orderLines, ShippingInfo shippingInfo, OrderState state) {
         setOrderer(orderer);
@@ -82,15 +106,15 @@ public class Order {
         if (obj == null) return false;
         if (obj.getClass() != Order.class) return false;
         Order other = (Order) obj;
-        if (this.id == null) return false;
-        return this.id.equals(other.id);
+        if (this.number == null) return false;
+        return this.number.equals(other.number);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((number == null) ? 0 : number.hashCode());
         return result;
     }
 }

@@ -11,10 +11,8 @@ public class CancelOrderService {
 
     @Transactional
     public void cancel(OrderNo number) {
-        Order order = orderRepository.findByNumber(number);
-        if (order == null) {
-            throw new NoOrderException();
-        }
+        Order order = orderRepository.findById(number)
+                .orElseThrow(() -> new NoOrderException());
         order.cancel();
     }
 }
