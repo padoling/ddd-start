@@ -2,6 +2,7 @@ package com.example.dddstart.order.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +10,7 @@ import java.util.Objects;
 // JPA에서 식별자 타입은 Serializable을 구현해야 한다.
 @Embeddable
 public class OrderNo implements Serializable {
+    @Getter
     @Column(name = "order_number")
     private String number;
 
