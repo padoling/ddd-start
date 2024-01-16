@@ -20,4 +20,8 @@ public class Orderer {
 
     protected Orderer() {
     }
+
+    public Orderer(MemberId memberId) {
+        this.memberId = memberId;
+    }
 }

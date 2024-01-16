@@ -2,7 +2,6 @@ package com.example.dddstart.order.domain;
 
 import com.example.dddstart.common.jpa.MoneyConverter;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
@@ -38,6 +37,8 @@ public class Order {
     @Convert(converter = MoneyConverter.class)
     private Money totalAmounts;
 
+    private List<Coupon> coupons;
+
     protected Order() {
     }
 
@@ -71,6 +72,11 @@ public class Order {
         if (orderLines == null || orderLines.isEmpty()) {
             throw new IllegalArgumentException("no OrderLine");
         }
+    }
+
+    public void calculateAmounts(DiscountCalculationService disCalSvc) {
+        Money discountAmounts = disCalSvc.calculateDiscountAmounts(this.orderLines, this.coupons, null);
+        // something discount logic...
     }
 
     private void calculateTotalAmounts() {
