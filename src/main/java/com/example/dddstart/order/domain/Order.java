@@ -16,6 +16,10 @@ public class Order {
     @EmbeddedId
     private OrderNo number;
 
+    // optimistic lock - 비선점 잠금을 위한 version 필드 명시
+    @Version
+    private long version;
+
     @Getter
     @Embedded
     private Orderer orderer;
@@ -104,6 +108,14 @@ public class Order {
         if (state != OrderState.PAYMENT_WAITING && state != OrderState.PREPARING) {
             throw new IllegalStateException("already shipped");
         }
+    }
+
+    public boolean matchVersion(long version) {
+        return version == this.version;
+    }
+
+    public void startShipping() {
+        // TODO
     }
 
     @Override
