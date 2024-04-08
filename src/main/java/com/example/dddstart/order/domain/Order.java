@@ -1,5 +1,6 @@
 package com.example.dddstart.order.domain;
 
+import com.example.dddstart.common.event.Events;
 import com.example.dddstart.common.jpa.MoneyConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -95,11 +96,13 @@ public class Order {
     public void changeShippingInfo(ShippingInfo newShippingInfo) {
         verifyNotYetShipped();
         setShippingInfo(newShippingInfo);
+        Events.raise(new ShippingInfoChangedEvent(number, newShippingInfo));
     }
 
     public void cancel() {
         verifyNotYetShipped();
         this.state = OrderState.CANCELED;
+        Events.raise(new OrderCanceledEvent(number.getNumber()));
     }
 
     public void completePayment() {}
